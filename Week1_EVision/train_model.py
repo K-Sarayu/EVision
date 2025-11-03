@@ -39,7 +39,7 @@ def main(args):
         ('cat', cat_pipeline, categorical_cols)
     ], remainder='drop')
 
-    # full pipeline
+   
     model = Pipeline([
         ('pre', preprocessor),
         ('rf', RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1))
