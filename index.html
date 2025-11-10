@@ -1,109 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EVAlytics | Electric Vehicle Data Analysis</title>
+  <meta charset="UTF-8">
+  <title>EVision AI Chatbot</title>
   <style>
     body {
-      font-family: "Poppins", sans-serif;
+      font-family: Arial, sans-serif;
+      background: #eef3ff;
       margin: 0;
-      padding: 0;
-      background: #f6f8fa;
-      color: #333;
     }
-
     header {
-      background-color: #0052cc;
+      background: #0052cc;
       color: white;
-      padding: 20px 0;
+      padding: 18px;
       text-align: center;
+      font-size: 22px;
+      font-weight: bold;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 2em;
-    }
-
-    section {
-      padding: 40px 10%;
-    }
-
-    h2 {
-      color: #0052cc;
-    }
-
-    .card {
+    #chat-container {
+      width: 60%;
+      margin: 30px auto;
       background: white;
       padding: 20px;
-      margin: 20px 0;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
     }
-
-    footer {
-      text-align: center;
-      padding: 20px;
+    #messages {
+      height: 400px;
+      overflow-y: auto;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      margin-bottom: 15px;
+    }
+    .msg {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 75%;
+      line-height: 1.4;
+    }
+    .user {
+      background: #d3e4ff;
+      margin-left: auto;
+      text-align: right;
+    }
+    .bot {
+      background: #e8ffe4;
+      text-align: left;
+    }
+    #input-area {
+      display: flex;
+      gap: 10px;
+    }
+    #userInput {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      font-size: 15px;
+    }
+    #sendBtn {
+      padding: 10px 22px;
       background: #0052cc;
+      border: none;
+      border-radius: 8px;
       color: white;
-      margin-top: 40px;
+      cursor: pointer;
+      font-size: 15px;
     }
-
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background: #0052cc;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
+    #sendBtn:hover {
       background: #003d99;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>⚡ EVAlytics</h1>
-    <p>Electric Vehicle Price Prediction and Data Analysis</p>
-  </header>
 
-  <section>
-    <div class="card">
-      <h2>About the Project</h2>
-      <p>
-        EVAlytics is a data analytics project that explores Electric Vehicle (EV) data to identify
-        key factors affecting vehicle prices and sales trends. It performs data cleaning,
-        preprocessing, and Exploratory Data Analysis (EDA) to uncover insights and patterns
-        in the EV market.
-      </p>
-    </div>
+<header>⚡ EVision AI Chatbot</header>
 
-    <div class="card">
-      <h2>Project Highlights</h2>
-      <ul>
-        <li>Comprehensive data preprocessing and cleaning</li>
-        <li>EDA using Python, Pandas, NumPy, Matplotlib & Seaborn</li>
-        <li>Visual insights into EV price, brand, and model trends</li>
-        <li>Foundation for future ML-based EV price prediction</li>
-      </ul>
-    </div>
+<div id="chat-container">
+  <div id="messages"></div>
 
-    <div class="card">
-      <h2>Repository Links</h2>
-      <p>
-        📁 <a href="https://github.com/YourUsername/EVAlytics" class="btn" target="_blank">View on GitHub</a>
-      </p>
-      <p>
-        📓 <a href="EV_Week1_Task.ipynb" class="btn" target="_blank">Open Notebook</a>
-      </p>
-    </div>
-  </section>
+  <div id="input-area">
+    <input type="text" id="userInput" placeholder="Ask me anything about Electric Vehicles...">
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
 
-  <footer>
-    <p>© 2025 EVAlytics | Developed by [Your Name]</p>
-  </footer>
+<script>
+  const messagesBox = document.getElementById("messages");
+  const input = document.getElementById("userInput");
+  const sendBtn = document.getElementById("sendBtn");
+
+  function addMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.className = `msg ${sender}`;
+    msg.textContent = text;
+    messagesBox.appendChild(msg);
+    messagesBox.scrollTop = messagesBox.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if(!text) return;
+    addMessage(text, "user");
+    input.value = "";
+
+    // Call backend chatbot API
+    try {
+      const response = await fetch("http://localhost:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      });
+      const data = await response.json();
+      addMessage(data.reply, "bot");
+    } catch {
+      addMessage("⚠️ Error connecting to AI server.", "bot");
+    }
+  }
+
+  sendBtn.onclick = sendMessage;
+  input.addEventListener("keypress", e => { if(e.key === "Enter") sendMessage(); });
+</script>
+
 </body>
 </html>
