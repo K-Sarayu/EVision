@@ -2,134 +2,204 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>EVision | Electric Vehicle Analysis</title>
+<title>EVision | Electric Vehicle Data Insights</title>
 <style>
+/* Global */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", sans-serif;
   margin: 0;
-  background: #f3f7ff;
+  background: linear-gradient(135deg, #e8f0ff, #ffffff);
+  color: #222;
 }
+
+/* Header */
 header {
-  background: #0052cc;
+  background: #0046b8;
   padding: 18px;
   text-align: center;
   color: white;
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 26px;
+  font-weight: 600;
 }
-section {
-  padding: 40px;
+
+/* Main Section */
+.container {
+  width: 80%;
+  margin: auto;
   text-align: center;
+  padding: 40px 0;
 }
-button {
-  padding: 12px 24px;
-  background: #0052cc;
+
+.container h2 {
+  font-size: 30px;
+  color: #003b97;
+}
+
+.container p {
+  font-size: 17px;
+  max-width: 750px;
+  margin: 15px auto;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* Info Cards */
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+
+.card {
+  background: white;
+  width: 290px;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+.card:hover { transform: translateY(-6px); }
+
+/* Chatbot Button */
+#chatButton {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #0046b8;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 50px;
+  padding: 14px 22px;
   cursor: pointer;
   font-size: 16px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.25);
 }
-button:hover { background: #003f99; }
+#chatButton:hover { background: #003b97; }
 
-/* Chatbot Panel */
+/* Chat Panel */
 #chatPanel {
   display: none;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 340px;
-  height: 450px;
+  bottom: 90px;
+  right: 25px;
+  width: 330px;
+  height: 420px;
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  border-radius: 15px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  overflow: hidden;
   flex-direction: column;
 }
+
+#chatHeader {
+  background: #0046b8;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  font-size: 18px;
+}
+
 #messages {
   flex: 1;
   overflow-y: auto;
   padding: 12px;
-  background: #f9f9f9;
+  background: #f7f9ff;
 }
-.msg {
-  padding: 8px;
-  margin: 6px 0;
-  border-radius: 6px;
-  max-width: 80%;
-}
-.user { background: #d1e0ff; margin-left: auto; }
-.bot { background: #d9ffe2; }
-#chatInputArea {
+
+.msg { padding: 8px 10px; margin: 6px 0; border-radius: 10px; max-width: 75%; }
+.user { background: #d8e6ff; margin-left: auto; }
+.bot { background: #dfffe3; }
+
+#inputArea {
   display: flex;
   padding: 10px;
   border-top: 1px solid #ddd;
 }
+
 #userInput {
   flex: 1;
   padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #aaa;
+  border-radius: 8px;
+  border: 1px solid #bbb;
 }
+
 #sendBtn {
   margin-left: 8px;
-  background: #0052cc;
-  color: white;
-  padding: 8px 14px;
+  padding: 8px 12px;
+  background: #0046b8;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  color: white;
 }
 </style>
 </head>
+
 <body>
 
-<header>⚡ EVision – Electric Vehicle Data Analysis</header>
+<header>⚡ EVision – Electric Vehicle Data Insights</header>
 
-<section>
-<h2>Welcome to EVision</h2>
-<p>Explore EV data insights and interact with our intelligent AI chatbot.</p>
-<button onclick="openChat()">🤖 Open AI Chatbot</button>
-</section>
+<div class="container">
+  <h2>Welcome to EVision</h2>
+  <p>
+    EVision is a data analysis initiative focused on understanding how Electric Vehicles (EVs)
+    are impacting modern transportation. With rising concerns on sustainability, energy costs,
+    and environmental protection, EVs play a major role in shaping the future of mobility.
+  </p>
+  <p>
+    This project analyzes EV price patterns, performance attributes, and market insights using
+    data visualization and machine learning. It also features an AI-powered chatbot to answer EV-related questions.
+  </p>
 
-<!-- Chatbot Panel -->
+  <div class="cards">
+    <div class="card"><h3>🔋 Why EVs?</h3><p>Zero emissions, lower fuel cost, quiet operation, and eco-friendly transport.</p></div>
+    <div class="card"><h3>📊 Data Insights</h3><p>We analyze pricing trends, specifications, and model comparisons.</p></div>
+    <div class="card"><h3>🤖 AI Chatbot</h3><p>Ask questions and explore EV knowledge interactively.</p></div>
+  </div>
+</div>
+
+<!-- Chatbot Floating Button -->
+<button id="chatButton" onclick="toggleChat()">🤖 AI Chatbot</button>
+
+<!-- Chat Panel -->
 <div id="chatPanel">
+  <div id="chatHeader">AI Chatbot</div>
   <div id="messages"></div>
-  <div id="chatInputArea">
+  <div id="inputArea">
     <input type="text" id="userInput" placeholder="Ask about EVs...">
     <button id="sendBtn">Send</button>
   </div>
 </div>
 
 <script>
-// Show Chat
-function openChat() {
-  document.getElementById("chatPanel").style.display = "flex";
+function toggleChat() {
+  const panel = document.getElementById("chatPanel");
+  panel.style.display = (panel.style.display === "flex") ? "none" : "flex";
 }
 
-// Add message to UI
 function addMsg(text, sender) {
   const msg = document.createElement("div");
   msg.className = "msg " + sender;
-  msg.innerText = text;
-  document.getElementById("messages").appendChild(msg);
-  document.getElementById("messages").scrollTop = messages.scrollHeight;
+  msg.textContent = text;
+  messages.appendChild(msg);
+  messages.scrollTop = messages.scrollHeight;
 }
 
-// Handle sending message
-async function sendMessage() {
-  const text = document.getElementById("userInput").value;
+document.getElementById("sendBtn").onclick = async () => {
+  const text = userInput.value.trim();
   if(!text) return;
   addMsg(text, "user");
-  document.getElementById("userInput").value = "";
+  userInput.value = "";
 
-  const response = await fetch("http://localhost:5000/chat", {
+  const res = await fetch("http://localhost:5000/chat", {
     method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ message: text })
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({message:text})
   });
-  const data = await response.json();
+  const data = await res.json();
   addMsg(data.reply, "bot");
 }
-document.getElementById("sendBtn").onclick = sendMessage;
 </script>
 
 </body>
